@@ -12,9 +12,10 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 // CRUD Leads
-export const GET_LEADS = 'GET_LEADS';
-export const DELETE_LEAD = 'DELETE_LEAD';
-export const ADD_LEAD = 'ADD_LEAD';
-export const ADD_LEAD_LOADING = 'ADD_LEAD_LOADING';
-export const ADD_LEAD_LOADED = 'ADD_LEAD_LOADED';
+export const GET_PVEITEMS = 'GET_PVEITEMS';
+export const PVEITEMS_LOADING = 'PVEITEMS_LOADING';
+export const DELETE_PVEITEM = 'DELETE_PVEITEM';
+export const ADD_PVEITEM = 'ADD_PVEITEM';
+export const ADD_PVEITEM_LOADING = 'ADD_PVEITEM_LOADING';
+export const ADD_PVEITEM_LOADED = 'ADD_PVEITEM_LOADED';
 export const GET_ERRORS = 'GET_ERRORS';

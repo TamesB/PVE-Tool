@@ -1,21 +1,21 @@
-from pve.models import PVEItem
-from rest_framework import viewsets, permissions
-from rest_framework.parsers import MultiPartParser, JSONParser
+from .models import PVEItem
+from .filters import PVEItemFilter
 from .serializers import PVEItemSerializer
 
-# Lead Viewset
-class PVEViewSet(viewsets.ModelViewSet):
-    queryset = PVEItem.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+from rest_framework import viewsets, permissions
+from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework import generics
+from rest_framework.response import Response
+from django_filters import rest_framework as filters
+
+# GET PVE itembook, with filtering based on chapter/paragraph
+class PVEItemViewSet(viewsets.ModelViewSet):
+    queryset = PVEItem.objects.select_related("hoofdstuk").select_related("paragraaf").select_related("versie").all().order_by('id')
     serializer_class = PVEItemSerializer
-    parser_classes = (MultiPartParser, JSONParser)
-
-    def get_queryset(self):
-        versie_id = self.kwargs['versie_id']
-
-        return queryset.filter(versie__id=versie_id)
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = PVEItemFilter
 
     def perform_create(self, serializer):
         serializer.save()

@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 ('EntreeUpgrade', models.BooleanField(default=False)),
                 ('Pakketdient', models.BooleanField(default=False)),
                 ('JamesConcept', models.BooleanField(default=False)),
-                ('bijlage', models.FileField(blank=True, null=True, upload_to=pve.models.PVEItem.get_upload_path)),
+                ('bijlage', models.FileField(blank=True, null=True, upload_to=pve.models.get_upload_path)),
                 ('Bouwsoort', models.ManyToManyField(blank=True, to='pve.Bouwsoort')),
                 ('Doelgroep', models.ManyToManyField(blank=True, to='pve.Doelgroep')),
                 ('TypeObject', models.ManyToManyField(blank=True, to='pve.TypeObject')),

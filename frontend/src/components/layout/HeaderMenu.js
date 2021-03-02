@@ -84,7 +84,7 @@ export class HeaderMenu extends Component {
         );
 
         return (
-            <Menu style={{margin: '0 0 2vh 0'}} fixed>
+            <Menu style={{margin: '0 0 2vh 0'}}>
               <Menu.Item>
                 <img src='https://react.semantic-ui.com/logo.png' />
               </Menu.Item>

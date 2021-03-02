@@ -7,7 +7,7 @@ import AlertTemplate from 'react-alert-template-basic';
 import LoadingBar from 'react-redux-loading-bar'
 
 import HeaderMenu from './layout/HeaderMenu';
-import Dashboard from './leads/Dashboard';
+import Dashboard from './items/Dashboard';
 import Alerts from './layout/Alerts';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
