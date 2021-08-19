@@ -5,6 +5,7 @@ import { HashRouter as Router, Route, Switch, Redirect
 import { Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import LoadingBar from 'react-redux-loading-bar'
+import ScriptTag from 'react-script-tag';
 
 import HeaderMenu from './layout/HeaderMenu';
 import Dashboard from './items/Dashboard';
@@ -33,6 +34,9 @@ class App extends Component {
         const article_padding = {
             padding: "0 5vw 0 5vw"
         }
+        const scripts = (
+            <ScriptTag type="text/javascript" src="AppScripts.js" />
+        )
 
         return (
             <Provider store={store}>
@@ -49,6 +53,7 @@ class App extends Component {
                                 <Route exact path="/login" component={Login} />
                             </Switch>
                         </div>
+                        {scripts}
                     </Fragment>
                     </Router>
                 </AlertProvider>

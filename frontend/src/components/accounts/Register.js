@@ -26,7 +26,7 @@ export class Register extends Component {
         const { username, email, password, password2 } = this.state;
 
         if(password !== password2) {
-            this.props.createMessage({passwordsNotMatch: "Passwords do not match."});
+            this.props.createMessage({passwordsNotMatch: "Wachtwoorden komen niet overeen."});
         } else {
             // make account
             const newUser = {

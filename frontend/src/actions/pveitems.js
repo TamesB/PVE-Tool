@@ -4,7 +4,7 @@ import { GET_PVEITEMS, PVEITEMS_LOADING, DELETE_PVEITEM, ADD_PVEITEM, ADD_PVEITE
 import { tokenConfig } from './auth';
 
 // GET PVEITEMS
-export const getItems = () => (dispatch, getState) => {
+export const getItems = (versie_id, hoofdstuk_id, paragraaf_id) => (dispatch, getState) => {
     dispatch({ type: PVEITEMS_LOADING });
 
     // Headers
@@ -14,7 +14,7 @@ export const getItems = () => (dispatch, getState) => {
         }
     }
 
-    axios.get('/api/pve/', tokenConfig(getState), config)
+    axios.get(`/api/pveitems/?versie=${versie_id}&hoofdstuk=${hoofdstuk_id}&paragraaf=${paragraaf_id}`, tokenConfig(getState), config)
         .then(res => {
             dispatch({
                 type: GET_PVEITEMS,
@@ -34,9 +34,9 @@ export const deleteItem = id => (dispatch, getState) => {
         }
     }
 
-    axios.delete(`/api/pve/${id}/`, tokenConfig(getState), config)
+    axios.delete(`/api/pveitems/${id}/`, tokenConfig(getState), config)
         .then(res => {
-            dispatch(createMessage({ deleteLead: 'Item Deleted' }));
+            dispatch(createMessage({ deleteLead: 'Item verwijderd' }));
             dispatch({
                 type: DELETE_PVEITEM,
                 payload: id
@@ -62,9 +62,9 @@ export const addItem = item => (dispatch, getState) => {
         formData.append("bijlage", item.bijlage);
     }
     axios
-        .post("/api/pve/", formData, tokenConfig(getState))
+        .post("/api/pveitems/", formData, tokenConfig(getState))
         .then(res => {
-            dispatch(createMessage({ addLead: 'Lead Added' }));
+            dispatch(createMessage({ addLead: 'Item toegevoegd' }));
             dispatch({
                 type: ADD_PVEITEM,
                 payload: res.data
