@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class FirstConfig(AppConfig):
-    name = 'leads'
+    name = 'pve'
