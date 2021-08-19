@@ -134,6 +134,7 @@ export class Items extends Component {
                     options={this.props.hoofdstukken.map(hoofdstuk => ({key: hoofdstuk.id, text: hoofdstuk.hoofdstuk, value: hoofdstuk.id}))}
                     value={hoofdstuk}
                 />  
+                { this.props.paragraven.length > 0 ?
                 <Form.Input
                     control={Select}
                     type="text"
@@ -143,7 +144,7 @@ export class Items extends Component {
                     onChange={this.handlePrgrfChange}
                     options={this.props.paragraven.map(paragraaf => ({key: paragraaf.id, text: paragraaf.paragraaf, value: paragraaf.id}))}
                     value={paragraaf}
-                /> 
+                /> : <></>}
                 </Form.Group>
                 </Form>
                 <Table striped>
