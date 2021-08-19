@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { getItems, deleteItem } from '../../actions/pveitems';
 import { getHoofdstukken } from '../../actions/hoofdstukken';
 import { getParagraven } from '../../actions/paragraven';
-import { Header, Table, Button, Icon, Segment, Dimmer, Loader, Image, Confirm, Accordion, Select } from 'semantic-ui-react'
+import { Header, Table, Button, Icon, Segment, Dimmer, Loader, Image, Confirm, Accordion, Select, Form } from 'semantic-ui-react'
 
 export class Items extends Component {
     static propTypes = {
@@ -82,20 +82,15 @@ export class Items extends Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Versie</Table.HeaderCell>
-                        <Table.HeaderCell>Hoofdstuk</Table.HeaderCell>
-                        <Table.HeaderCell>Paragraaf</Table.HeaderCell>
                         <Table.HeaderCell>Inhoud</Table.HeaderCell>
                         <Table.HeaderCell>Bijlage</Table.HeaderCell>
-                        <Table.HeaderCell>&nbsp;</Table.HeaderCell>
+                        <Table.HeaderCell>Acties</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-
                 <Table.Body>
                 {this.props.items.map(item => (
                     <Table.Row key={item.id}>
                         <Table.Cell>{item.versie}</Table.Cell>
-                        <Table.Cell>{item.hoofdstuk}</Table.Cell>
-                        <Table.Cell>{item.paragraaf}</Table.Cell>
                         <Table.Cell>{item.inhoud}</Table.Cell>
                         <Table.Cell>
                             {item.bijlage ?                                     
@@ -127,9 +122,30 @@ export class Items extends Component {
 
             <Fragment>
                 <Header as='h2'>PVE Items</Header>
-                <Select search placeholder='Hoofdstuk' value={this.hoofdstuk} options={this.props.hoofdstukken.map(hoofdstuk => ({key: hoofdstuk.id, text: hoofdstuk.hoofdstuk, value: hoofdstuk.id}))} onChange={this.handleHfstChange}/>
-                <Select search placeholder='Paragraaf' value={this.paragraaf} options={this.props.paragraven.map(paragraaf => ({key: paragraaf.id, text: paragraaf.paragraaf, value: paragraaf.id}))} onChange={this.handlePrgrfChange}/>
-
+                <Form>
+                <Form.Group widths='equal'>
+                <Form.Input
+                    control={Select}
+                    type="text"
+                    name="hoofdstuk"
+                    placeholder='Kies hoofdstuk...'
+                    label="Hoofdstuk"
+                    onChange={this.handleHfstChange}
+                    options={this.props.hoofdstukken.map(hoofdstuk => ({key: hoofdstuk.id, text: hoofdstuk.hoofdstuk, value: hoofdstuk.id}))}
+                    value={hoofdstuk}
+                />  
+                <Form.Input
+                    control={Select}
+                    type="text"
+                    name="paragraaf"
+                    label="Paragraaf"
+                    placeholder='Kies paragraaf...'
+                    onChange={this.handlePrgrfChange}
+                    options={this.props.paragraven.map(paragraaf => ({key: paragraaf.id, text: paragraaf.paragraaf, value: paragraaf.id}))}
+                    value={paragraaf}
+                /> 
+                </Form.Group>
+                </Form>
                 <Table striped>
                     { this.props.itemsIsLoading ? loadingTable : renderedTable}
                 </Table>
