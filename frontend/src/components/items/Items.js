@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
 import PropTypes from 'prop-types';
-import { getItems, deleteItem } from '../../actions/pveitems';
+import { getItems, deleteItem, addItem } from '../../actions/pveitems';
 import { getHoofdstukken } from '../../actions/hoofdstukken';
 import { getParagraven } from '../../actions/paragraven';
-import { Header, Table, Button, Icon, Segment, Dimmer, Loader, Image, Confirm, Accordion, Select, Form } from 'semantic-ui-react'
+import { Header, Table, Button, Icon, Segment, Dimmer, Modal, Loader, Image, Confirm, Accordion, Checkbox, Select, Form } from 'semantic-ui-react'
 
 export class Items extends Component {
     static propTypes = {
@@ -21,15 +21,20 @@ export class Items extends Component {
         items: PropTypes.array.isRequired,
         getItems: PropTypes.func.isRequired,
         deleteItem: PropTypes.func.isRequired,
-        itemsIsLoading: PropTypes.bool
+        itemsIsLoading: PropTypes.bool,
+        addItem: PropTypes.func.isRequired,
     };
 
     state = {
         openConfirmDelete: false,
         confirmDeleteItem: 0,
+        openAddItemForm: false,
         versie: 1,
         hoofdstuk: "",
         paragraaf: "",
+        additeminhoud: "",
+        bijlage: null,
+        basisregel: false,
     }
 
     showDeleteModal = (item_id) => this.setState({ openConfirmDelete: true, confirmDeleteItem: item_id })
@@ -39,6 +44,9 @@ export class Items extends Component {
         this.props.deleteItem(this.state.confirmDeleteItem)
         this.setState({ openConfirmDelete: false, confirmDeleteItem: 0 })
     }
+
+    showAddItemFormModal = (versie, hoofdstuk, paragraaf) => this.setState({ openAddItemForm: true, addItemVersie: versie, addItemHoofdstuk: hoofdstuk, addItemParagraaf: paragraaf })
+    addItemCancel = () => this.setState({ openAddItemForm: false })
 
     handleHfstChange = (e, { value }) => {
         this.setState({ hoofdstuk: value, paragraaf: "" }, () => {
@@ -53,6 +61,26 @@ export class Items extends Component {
             () => this.props.getItems(this.state.versie, this.state.hoofdstuk, this.state.paragraaf)
         )
     }
+
+    fileChangeForm = e => {
+        this.setState({ [e.target.name]: e.target.files[0] });
+    };
+
+    onChange = e => this.setState({ [e.target.name]: e.target.value });
+
+    onSubmit = e => {
+        e.preventDefault();
+        const { versie, hoofdstuk, paragraaf, additeminhoud, basisregel, bijlage } = this.state;
+        const item = { versie, hoofdstuk, paragraaf, additeminhoud, basisregel, bijlage };
+        this.props.addItem(item)
+        this.setState({
+            openAddItemForm: false,
+            additeminhoud: '',
+            basisregel: false,
+            bijlage: null,
+        })
+    };
+
     componentDidMount() {
         this.props.getHoofdstukken(this.state.versie);
         this.props.getParagraven(this.state.versie, this.state.hoofdstuk);
@@ -60,7 +88,10 @@ export class Items extends Component {
     };
       
     render() {
-        const { openConfirmDelete, confirmDeleteItem, hoofdstuk, paragraaf } = this.state
+        const { openConfirmDelete, confirmDeleteItem, openAddItemForm, addItemVersie, addItemHoofdstuk, addItemParagraaf, hoofdstuk, paragraaf, additeminhoud, basisregel, bijlage } = this.state
+        const form_padding = {
+            padding: "0 10vw 0 10vw"
+        }
 
         const loadingTable = (
             <Fragment>
@@ -107,6 +138,9 @@ export class Items extends Component {
                     </Table.Row>
                 ))}
                 </Table.Body>
+                <Button onClick={() => this.showAddItemFormModal(this.state.versie, this.state.hoofdstuk, this.state.paragraaf)} color="green" icon>
+                Voeg item toe <Icon name="plus" />
+                </Button>
 
                 <Confirm
                     content="Weet je het zeker?"
@@ -116,6 +150,45 @@ export class Items extends Component {
                     onCancel={this.handleDeleteCancel}
                     onConfirm={this.handleDeleteConfirm}
                 />
+                <Modal
+                as={Form} 
+                open={openAddItemForm}
+                onClose={this.addItemCancel}
+                onOpen={this.handleItemAddConfirm}
+                onSubmit={this.onSubmit}
+                >
+                <Modal.Header>Voeg item toe</Modal.Header>
+                <Modal.Content>
+                    <Modal.Description>
+                            <Form.Input
+                                type="text"
+                                name="additeminhoud"
+                                label="Inhoud"
+                                onChange={this.onChange}
+                                value={additeminhoud}
+                            />  
+                            <Form.Field
+                                control={Checkbox}
+                                value={basisregel}
+                                label={{ children: 'BASIS Regel' }}
+                            />
+                            <Form.Input 
+                                type="file" 
+                                id="file" 
+                                name="bijlage"
+                                hidden 
+                                label="Upload Bijlage"
+                                onChange={this.fileChangeForm} 
+                            />
+                    </Modal.Description>
+                </Modal.Content>
+                <Modal.Actions>
+                <Button primary type="submit">
+                    Voeg toe <Icon name='right chevron' />
+                </Button>
+                </Modal.Actions>
+                </Modal>
+
             </Fragment>
         );
         return (
@@ -158,11 +231,12 @@ export class Items extends Component {
 const mapStateToProps = state => ({
     items: state.pveitems.items,
     itemsIsLoading: state.pveitems.itemsIsLoading,
+    isLoading: state.pveitems.isLoading,
     hoofdstukken: state.hoofdstukken.hoofdstukken,
     hoofdstukkenIsLoading: state.hoofdstukken.hoofdstukkenIsLoading,
     paragraven: state.paragraven.paragraven,
     paragravenIsLoading: state.paragraven.paragravenIsLoading,
 });
 
-export default connect(mapStateToProps, { getHoofdstukken, getParagraven, getItems, deleteItem })
+export default connect(mapStateToProps, { getHoofdstukken, getParagraven, getItems, deleteItem, addItem })
 (Items);

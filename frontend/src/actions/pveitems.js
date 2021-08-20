@@ -55,7 +55,7 @@ export const addItem = item => (dispatch, getState) => {
     formData.append("versie", item.versie);
     formData.append("hoofdstuk", item.hoofdstuk);
     formData.append("paragraaf", item.paragraaf);
-    formData.append("inhoud", item.inhoud);
+    formData.append("inhoud", item.additeminhoud);
     formData.append("basisregel", item.basisregel);
 
     if(item.bijlage){
